@@ -27,27 +27,32 @@ static void err(httplib::Response& res, const std::exception& e, int code = 502)
 }
 
 static openhab::OpenHABClient makeClient(const httplib::Request& req) {
-    auto body    = json::parse(req.body);
-    std::string url      = body.value("url",      "https://myopenhab.org");
-    std::string username = body.value("username", "");
-    std::string password = body.value("password", "");
-    std::string token    = body.value("token",    "");
+    auto body = json::parse(req.body);
+    std::string url      = body.contains("url")      && body["url"].is_string()      ? body["url"].get<std::string>()      : "https://myopenhab.org";
+    std::string username = body.contains("username") && body["username"].is_string() ? body["username"].get<std::string>() : "";
+    std::string password = body.contains("password") && body["password"].is_string() ? body["password"].get<std::string>() : "";
+    std::string token    = body.contains("token")    && body["token"].is_string()    ? body["token"].get<std::string>()    : "";
     return openhab::OpenHABClient(url, username, password, token);
 }
 
 static std::string bodyStr(const httplib::Request& req) {
-    auto b = json::parse(req.body);
-    if (b.contains("body") && !b["body"].is_null())
-        return b["body"].get<std::string>();
+    try {
+        auto b = json::parse(req.body);
+        if (b.contains("body") && b["body"].is_string())
+            return b["body"].get<std::string>();
+    } catch (...) {}
     return "";
 }
 
 static std::string param(const httplib::Request& req,
                           const std::string& key,
                           const std::string& def = "") {
-    auto b = json::parse(req.body);
-    if (b.contains("params") && b["params"].contains(key))
-        return b["params"][key].get<std::string>();
+    try {
+        auto b = json::parse(req.body);
+        if (b.contains("params") && !b["params"].is_null() && b["params"].contains(key)
+            && b["params"][key].is_string())
+            return b["params"][key].get<std::string>();
+    } catch (...) {}
     return def;
 }
 
