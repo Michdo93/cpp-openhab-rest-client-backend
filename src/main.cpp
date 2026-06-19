@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <stdexcept>
+#include <cstdlib>
 
 using json = nlohmann::json;
 
@@ -42,11 +43,18 @@ static std::string param(const crow::request& req, const std::string& key,
     return def;
 }
 
-// ── Response helper ───────────────────────────────────────────────────────────
+// ── Response helpers with CORS headers ───────────────────────────────────────
+
+static void addCors(crow::response& r) {
+    r.set_header("Access-Control-Allow-Origin",  "*");
+    r.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    r.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
 
 static crow::response ok(const json& j) {
     crow::response r(j.dump());
     r.set_header("Content-Type", "application/json");
+    addCors(r);
     return r;
 }
 
@@ -54,31 +62,16 @@ static crow::response err(const std::exception& e, int code = 502) {
     json j = {{"error", e.what()}};
     crow::response r(code, j.dump());
     r.set_header("Content-Type", "application/json");
+    addCors(r);
     return r;
 }
-
-// ── CORS middleware ───────────────────────────────────────────────────────────
-
-struct CORSMiddleware {
-    struct context {};
-    void before_handle(crow::request&, crow::response& res, context&) {
-        res.set_header("Access-Control-Allow-Origin",  "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    }
-    void after_handle(crow::request&, crow::response& res, context&) {
-        res.set_header("Access-Control-Allow-Origin",  "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    }
-};
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 int main() {
-    crow::App<CORSMiddleware> app;
+    crow::App app;
 
-    // OPTIONS preflight
+    // OPTIONS preflight – must come first
     CROW_ROUTE(app, "/<path>").methods(crow::HTTPMethod::OPTIONS)
     ([](const crow::request&, crow::response& res, const std::string&) {
         res.set_header("Access-Control-Allow-Origin",  "*");
@@ -405,7 +398,8 @@ int main() {
     });
     CROW_ROUTE(app, "/api/inbox/<string>/approve").methods(crow::HTTPMethod::POST)
     ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Inbox(c).approveDiscoveryResult(uid, bodyStr(req))); }
+        try { auto c=makeClient(req);
+              return ok(openhab::Inbox(c).approveDiscoveryResult(uid, bodyStr(req))); }
         catch (const std::exception& e) { return err(e); }
     });
     CROW_ROUTE(app, "/api/inbox/<string>/ignore").methods(crow::HTTPMethod::POST)
