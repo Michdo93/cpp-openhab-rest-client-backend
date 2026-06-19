@@ -4,7 +4,6 @@ RUN apt-get update && apt-get install -y \
     build-essential cmake git \
     libcurl4-openssl-dev \
     nlohmann-json3-dev \
-    libasio-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

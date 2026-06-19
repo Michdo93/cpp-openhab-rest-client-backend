@@ -1,18 +1,34 @@
-#include "crow.h"
+#define CPPHTTPLIB_OPENSSL_SUPPORT
+#include "httplib.h"
 #include <openhab/openhab.h>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <stdexcept>
 #include <cstdlib>
 
 using json = nlohmann::json;
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
+static void setCORS(httplib::Response& res) {
+    res.set_header("Access-Control-Allow-Origin",  "*");
+    res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.set_header("Access-Control-Max-Age",       "3600");
+}
 
-// ── Helper: build client from request body ────────────────────────────────────
+static void ok(httplib::Response& res, const json& j) {
+    setCORS(res);
+    res.set_content(j.dump(), "application/json");
+}
 
-static openhab::OpenHABClient makeClient(const crow::request& req) {
-    auto body = json::parse(req.body);
+static void err(httplib::Response& res, const std::exception& e, int code = 502) {
+    setCORS(res);
+    res.status = code;
+    res.set_content(json{{"error", e.what()}}.dump(), "application/json");
+}
+
+static openhab::OpenHABClient makeClient(const httplib::Request& req) {
+    auto body    = json::parse(req.body);
     std::string url      = body.value("url",      "https://myopenhab.org");
     std::string username = body.value("username", "");
     std::string password = body.value("password", "");
@@ -20,24 +36,15 @@ static openhab::OpenHABClient makeClient(const crow::request& req) {
     return openhab::OpenHABClient(url, username, password, token);
 }
 
-static std::string bodyStr(const crow::request& req) {
+static std::string bodyStr(const httplib::Request& req) {
     auto b = json::parse(req.body);
     if (b.contains("body") && !b["body"].is_null())
         return b["body"].get<std::string>();
     return "";
 }
 
-static json bodyJson(const crow::request& req) {
-    auto b = json::parse(req.body);
-    if (b.contains("body") && !b["body"].is_null()) {
-        if (b["body"].is_string())
-            return json::parse(b["body"].get<std::string>());
-        return b["body"];
-    }
-    return json::object();
-}
-
-static std::string param(const crow::request& req, const std::string& key,
+static std::string param(const httplib::Request& req,
+                          const std::string& key,
                           const std::string& def = "") {
     auto b = json::parse(req.body);
     if (b.contains("params") && b["params"].contains(key))
@@ -45,525 +52,308 @@ static std::string param(const crow::request& req, const std::string& key,
     return def;
 }
 
-// ── Response helpers with CORS headers ───────────────────────────────────────
+// ── Macro helpers ─────────────────────────────────────────────────────────────
 
-static void addCors(crow::response& r) {
-    r.set_header("Access-Control-Allow-Origin",  "*");
-    r.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    r.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-}
-
-static crow::response ok(const json& j) {
-    crow::response r(j.dump());
-    r.set_header("Content-Type", "application/json");
-    addCors(r);
-    return r;
-}
-
-static crow::response err(const std::exception& e, int code = 502) {
-    json j = {{"error", e.what()}};
-    crow::response r(code, j.dump());
-    r.set_header("Content-Type", "application/json");
-    addCors(r);
-    return r;
-}
-
-// ── Main ─────────────────────────────────────────────────────────────────────
+#define POST(path, body) \
+    svr.Post(path, [](const httplib::Request& req, httplib::Response& res) { \
+        try { body } catch (const std::exception& e) { err(res, e); } \
+    })
 
 int main() {
-    crow::SimpleApp app;
+    httplib::Server svr;
 
-    // Healthcheck + CORS preflight catchall
-    CROW_ROUTE(app, "/")
-    ([]() -> crow::response {
-        crow::response r(R"({"status":"ok"})");
-        r.set_header("Content-Type", "application/json");
-        r.set_header("Access-Control-Allow-Origin", "*");
-        return r;
+    // ── CORS preflight – catch-all OPTIONS ────────────────────────────────────
+    svr.Options(".*", [](const httplib::Request&, httplib::Response& res) {
+        setCORS(res);
+        res.status = 204;
     });
 
-    // OPTIONS preflight für alle /api/* Pfade
-    CROW_ROUTE(app, "/api/<path>").methods(crow::HTTPMethod::OPTIONS)
-    ([](const crow::request&, const std::string&) -> crow::response {
-        crow::response res(204);
-        res.set_header("Access-Control-Allow-Origin",  "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.set_header("Access-Control-Max-Age",       "3600");
-        return res;
+    // ── Healthcheck ───────────────────────────────────────────────────────────
+    svr.Get("/", [](const httplib::Request&, httplib::Response& res) {
+        setCORS(res);
+        res.set_content(R"({"status":"ok"})", "application/json");
     });
 
     // ── Connect ───────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/connect").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
+    svr.Post("/api/connect", [](const httplib::Request& req, httplib::Response& res) {
         try {
             auto c = makeClient(req);
-            json r = {{"loggedIn", c.isLoggedIn()},
-                      {"isCloud",  c.isCloud()},
-                      {"url",      c.baseUrl()}};
-            return ok(r);
-        } catch (const std::exception& e) { return err(e); }
+            ok(res, {{"loggedIn", c.isLoggedIn()},
+                     {"isCloud",  c.isCloud()},
+                     {"url",      c.baseUrl()}});
+        } catch (const std::exception& e) { err(res, e); }
     });
 
     // ── UUID + Systeminfo ─────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/uuid").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::UUID(c).getUUID()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/systeminfo").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Systeminfo(c).getSystemInfo()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/systeminfo/uom").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Systeminfo(c).getUoMInfo()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/uuid",           { ok(res, openhab::UUID(makeClient(req)).getUUID()); });
+    POST("/api/systeminfo",     { ok(res, openhab::Systeminfo(makeClient(req)).getSystemInfo()); });
+    POST("/api/systeminfo/uom", { ok(res, openhab::Systeminfo(makeClient(req)).getUoMInfo()); });
 
     // ── Items ─────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/items").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).getItems()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/items",                   { ok(res, openhab::Items(makeClient(req)).getItems()); });
+    POST("/api/items/metadata/purge",    { ok(res, openhab::Items(makeClient(req)).purgeOrphanedMetadata()); });
+    svr.Post("/api/items/([^/]+)",       [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).getItem(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).getItem(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/state", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).getItemState(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/state").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).getItemState(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/state/update", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).updateItemState(req.matches[1], bodyStr(req))); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/state/update").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).updateItemState(name, bodyStr(req))); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/command", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).sendCommand(req.matches[1], bodyStr(req))); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/command").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).sendCommand(name, bodyStr(req))); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/delete", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).deleteItem(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/delete").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).deleteItem(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/tags/([^/]+)/add", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).addTag(req.matches[1], req.matches[2])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/tags/<string>/add").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name, const std::string& tag) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).addTag(name, tag)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/tags/([^/]+)/remove", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).removeTag(req.matches[1], req.matches[2])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/tags/<string>/remove").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name, const std::string& tag) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).removeTag(name, tag)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/members/([^/]+)/add", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).addGroupMember(req.matches[1], req.matches[2])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/members/<string>/add").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name, const std::string& member) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).addGroupMember(name, member)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/members/([^/]+)/remove", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).removeGroupMember(req.matches[1], req.matches[2])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/items/<string>/members/<string>/remove").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name, const std::string& member) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).removeGroupMember(name, member)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/items/<string>/metadata/namespaces").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).getMetadataNamespaces(name)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/items/metadata/purge").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Items(c).purgeOrphanedMetadata()); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/items/([^/]+)/metadata/namespaces", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Items(makeClient(req)).getMetadataNamespaces(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Things ────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/things").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).getThings()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/things", { ok(res, openhab::Things(makeClient(req)).getThings()); });
+    svr.Post("/api/things/([^/]+)",          [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).getThing(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/things/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).getThing(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/things/([^/]+)/status",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).getThingStatus(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/things/<string>/status").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).getThingStatus(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/things/([^/]+)/enable",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).enableThing(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/things/<string>/enable").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).enableThing(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/things/([^/]+)/disable",  [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).disableThing(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/things/<string>/disable").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).disableThing(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/things/([^/]+)/delete",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).deleteThing(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/things/<string>/delete").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).deleteThing(uid)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/things/<string>/firmwares").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Things(c).getThingFirmwares(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/things/([^/]+)/firmwares",[](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Things(makeClient(req)).getThingFirmwares(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Rules ─────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/rules").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).getRules()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/rules", { ok(res, openhab::Rules(makeClient(req)).getRules()); });
+    svr.Post("/api/rules/([^/]+)",            [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).getRule(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).getRule(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/enable",     [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).enable(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/enable").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).enable(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/disable",    [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).disable(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/disable").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).disable(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/runnow",     [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).runNow(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/runnow").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).runNow(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/delete",     [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).deleteRule(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/delete").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).deleteRule(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/actions",    [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).getActions(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/actions").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).getActions(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/triggers",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).getTriggers(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/rules/<string>/triggers").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Rules(c).getTriggers(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/rules/([^/]+)/conditions", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Rules(makeClient(req)).getConditions(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Addons ────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/addons").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).getAddons()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/addons",             { ok(res, openhab::Addons(makeClient(req)).getAddons()); });
+    POST("/api/addons/types",       { ok(res, openhab::Addons(makeClient(req)).getAddonTypes()); });
+    POST("/api/addons/suggestions", { ok(res, openhab::Addons(makeClient(req)).getAddonSuggestions()); });
+    POST("/api/addons/services",    { ok(res, openhab::Addons(makeClient(req)).getAddonServices()); });
+    svr.Post("/api/addons/([^/]+)/install",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Addons(makeClient(req)).installAddon(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/addons/types").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).getAddonTypes()); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/addons/([^/]+)/uninstall", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Addons(makeClient(req)).uninstallAddon(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/addons/suggestions").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).getAddonSuggestions()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/addons/services").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).getAddonServices()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/addons/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).getAddon(id)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/addons/<string>/install").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).installAddon(id)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/addons/<string>/uninstall").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Addons(c).uninstallAddon(id)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/addons/([^/]+)",           [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Addons(makeClient(req)).getAddon(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Audio ─────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/audio/defaultsink").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Audio(c).getDefaultSink()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/audio/defaultsource").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Audio(c).getDefaultSource()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/audio/sinks").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Audio(c).getSinks()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/audio/sources").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Audio(c).getSources()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/audio/defaultsink",   { ok(res, openhab::Audio(makeClient(req)).getDefaultSink()); });
+    POST("/api/audio/defaultsource", { ok(res, openhab::Audio(makeClient(req)).getDefaultSource()); });
+    POST("/api/audio/sinks",         { ok(res, openhab::Audio(makeClient(req)).getSinks()); });
+    POST("/api/audio/sources",       { ok(res, openhab::Audio(makeClient(req)).getSources()); });
 
     // ── Logging ───────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/logging").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Logging(c).getLoggers()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/logging", { ok(res, openhab::Logging(makeClient(req)).getLoggers()); });
+    svr.Post("/api/logging/([^/]+)/set",    [](const httplib::Request& req, httplib::Response& res) {
+        try { auto level = param(req,"level","INFO");
+              ok(res, openhab::Logging(makeClient(req)).modifyOrAddLogger(req.matches[1], level)); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/logging/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Logging(c).getLogger(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/logging/([^/]+)/delete", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Logging(makeClient(req)).removeLogger(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/logging/<string>/set").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); auto level=param(req,"level","INFO");
-              return ok(openhab::Logging(c).modifyOrAddLogger(name, level)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/logging/<string>/delete").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Logging(c).removeLogger(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/logging/([^/]+)",        [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Logging(makeClient(req)).getLogger(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Links ─────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/links").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Links(c).getLinks()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/links/orphan").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Links(c).getOrphanLinks()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/links",        { ok(res, openhab::Links(makeClient(req)).getLinks()); });
+    POST("/api/links/orphan", { ok(res, openhab::Links(makeClient(req)).getOrphanLinks()); });
 
     // ── ChannelTypes / ThingTypes / ConfigDescriptions ────────────────────────
-    CROW_ROUTE(app, "/api/channel-types").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::ChannelTypes(c).getChannelTypes()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/thing-types").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::ThingTypes(c).getThingTypes()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/config-descriptions").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::ConfigDescriptions(c).getConfigDescriptions()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/channel-types",       { ok(res, openhab::ChannelTypes(makeClient(req)).getChannelTypes()); });
+    POST("/api/thing-types",         { ok(res, openhab::ThingTypes(makeClient(req)).getThingTypes()); });
+    POST("/api/config-descriptions", { ok(res, openhab::ConfigDescriptions(makeClient(req)).getConfigDescriptions()); });
 
     // ── Persistence ───────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/persistence").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Persistence(c).getServices()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/persistence/items").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Persistence(c).getItemsFromService()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/persistence/items/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& item) -> crow::response {
-        try { auto c=makeClient(req); auto svc=param(req,"serviceId","");
-              return ok(openhab::Persistence(c).getItemPersistenceData(item, svc)); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/persistence",       { ok(res, openhab::Persistence(makeClient(req)).getServices()); });
+    POST("/api/persistence/items", { ok(res, openhab::Persistence(makeClient(req)).getItemsFromService()); });
+    svr.Post("/api/persistence/items/([^/]+)", [](const httplib::Request& req, httplib::Response& res) {
+        try { auto svc = param(req,"serviceId","");
+              ok(res, openhab::Persistence(makeClient(req)).getItemPersistenceData(req.matches[1], svc)); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Discovery + Inbox ─────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/discovery").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Discovery(c).getDiscoveryBindings()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/discovery", { ok(res, openhab::Discovery(makeClient(req)).getDiscoveryBindings()); });
+    svr.Post("/api/discovery/([^/]+)/scan", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Discovery(makeClient(req)).startBindingScan(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/discovery/<string>/scan").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& bid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Discovery(c).startBindingScan(bid)); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/inbox", { ok(res, openhab::Inbox(makeClient(req)).getDiscoveredThings()); });
+    svr.Post("/api/inbox/([^/]+)/approve",  [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Inbox(makeClient(req)).approveDiscoveryResult(req.matches[1], bodyStr(req))); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/inbox").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Inbox(c).getDiscoveredThings()); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/inbox/([^/]+)/ignore",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Inbox(makeClient(req)).ignoreDiscoveryResult(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/inbox/<string>/approve").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req);
-              return ok(openhab::Inbox(c).approveDiscoveryResult(uid, bodyStr(req))); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/inbox/([^/]+)/unignore", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Inbox(makeClient(req)).unignoreDiscoveryResult(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/inbox/<string>/ignore").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Inbox(c).ignoreDiscoveryResult(uid)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/inbox/<string>/unignore").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Inbox(c).unignoreDiscoveryResult(uid)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/inbox/<string>/delete").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Inbox(c).removeDiscoveryResult(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/inbox/([^/]+)/delete",   [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Inbox(makeClient(req)).removeDiscoveryResult(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── Sitemaps ──────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/sitemaps").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Sitemaps(c).getSitemaps()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/sitemaps", { ok(res, openhab::Sitemaps(makeClient(req)).getSitemaps()); });
+    svr.Post("/api/sitemaps/([^/]+)/([^/]+)", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Sitemaps(makeClient(req)).getSitemapPage(req.matches[1], req.matches[2])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/sitemaps/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& name) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Sitemaps(c).getSitemap(name)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/sitemaps/([^/]+)",         [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Sitemaps(makeClient(req)).getSitemap(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
-    // ── Tags / Templates / ModuleTypes / ProfileTypes ─────────────────────────
-    CROW_ROUTE(app, "/api/tags").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Tags(c).getTags()); }
-        catch (const std::exception& e) { return err(e); }
+    // ── Tags ──────────────────────────────────────────────────────────────────
+    POST("/api/tags", { ok(res, openhab::Tags(makeClient(req)).getTags()); });
+    svr.Post("/api/tags/([^/]+)/delete", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Tags(makeClient(req)).deleteTag(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/tags/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Tags(c).getTag(id)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/tags/([^/]+)",        [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Tags(makeClient(req)).getTag(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/templates").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Templates(c).getTemplates()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/module-types").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::ModuleTypes(c).getModuleTypes()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/profile-types").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::ProfileTypes(c).getProfileTypes()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+
+    // ── Templates / ModuleTypes / ProfileTypes ────────────────────────────────
+    POST("/api/templates",    { ok(res, openhab::Templates(makeClient(req)).getTemplates()); });
+    POST("/api/module-types", { ok(res, openhab::ModuleTypes(makeClient(req)).getModuleTypes()); });
+    POST("/api/profile-types",{ ok(res, openhab::ProfileTypes(makeClient(req)).getProfileTypes()); });
 
     // ── Transformations ───────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/transformations").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Transformations(c).getTransformations()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/transformations/services").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Transformations(c).getTransformationServices()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/transformations/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Transformations(c).getTransformation(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/transformations",          { ok(res, openhab::Transformations(makeClient(req)).getTransformations()); });
+    POST("/api/transformations/services", { ok(res, openhab::Transformations(makeClient(req)).getTransformationServices()); });
+    svr.Post("/api/transformations/([^/]+)", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Transformations(makeClient(req)).getTransformation(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
     // ── UI / Services / Iconsets ──────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/ui/tiles").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::UI(c).getUITiles()); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/ui/tiles", { ok(res, openhab::UI(makeClient(req)).getUITiles()); });
+    svr.Post("/api/ui/components/([^/]+)", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::UI(makeClient(req)).getUIComponents(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/ui/components/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& ns) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::UI(c).getUIComponents(ns)); }
-        catch (const std::exception& e) { return err(e); }
+    POST("/api/services", { ok(res, openhab::Services(makeClient(req)).getServices()); });
+    svr.Post("/api/services/([^/]+)/config", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Services(makeClient(req)).getServiceConfig(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/services").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Services(c).getServices()); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/services/([^/]+)",        [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Services(makeClient(req)).getService(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
-    CROW_ROUTE(app, "/api/services/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Services(c).getService(id)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/services/<string>/config").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& id) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Services(c).getServiceConfig(id)); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/iconsets").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Iconsets(c).getIconsets()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/iconsets", { ok(res, openhab::Iconsets(makeClient(req)).getIconsets()); });
 
     // ── Auth ──────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/auth/apitokens").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Auth(c).getAPITokens()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/auth/sessions").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Auth(c).getSessions()); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/auth/apitokens", { ok(res, openhab::Auth(makeClient(req)).getAPITokens()); });
+    POST("/api/auth/sessions",  { ok(res, openhab::Auth(makeClient(req)).getSessions()); });
 
     // ── Voice ─────────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/voice/voices").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Voice(c).getVoices()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/voice/defaultvoice").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Voice(c).getDefaultVoice()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/voice/interpreters").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Voice(c).getInterpreters()); }
-        catch (const std::exception& e) { return err(e); }
-    });
-    CROW_ROUTE(app, "/api/voice/say").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req) -> crow::response {
-        try { auto c=makeClient(req);
-              return ok(openhab::Voice(c).sayText(bodyStr(req), "", "")); }
-        catch (const std::exception& e) { return err(e); }
-    });
+    POST("/api/voice/voices",       { ok(res, openhab::Voice(makeClient(req)).getVoices()); });
+    POST("/api/voice/defaultvoice", { ok(res, openhab::Voice(makeClient(req)).getDefaultVoice()); });
+    POST("/api/voice/interpreters", { ok(res, openhab::Voice(makeClient(req)).getInterpreters()); });
+    POST("/api/voice/say",          { ok(res, openhab::Voice(makeClient(req)).sayText(bodyStr(req),"","")); });
 
     // ── Actions ───────────────────────────────────────────────────────────────
-    CROW_ROUTE(app, "/api/actions/<string>").methods(crow::HTTPMethod::POST)
-    ([](const crow::request& req, const std::string& uid) -> crow::response {
-        try { auto c=makeClient(req); return ok(openhab::Actions(c).getActions(uid)); }
-        catch (const std::exception& e) { return err(e); }
+    svr.Post("/api/actions/([^/]+)", [](const httplib::Request& req, httplib::Response& res) {
+        try { ok(res, openhab::Actions(makeClient(req)).getActions(req.matches[1])); }
+        catch (const std::exception& e) { err(res, e); }
     });
 
-    // ── Port from environment variable (Render.com sets PORT) ─────────────────
+    // ── Start ─────────────────────────────────────────────────────────────────
     const char* portEnv = std::getenv("PORT");
-    uint16_t port = portEnv ? static_cast<uint16_t>(std::stoi(portEnv)) : 8080;
+    int port = portEnv ? std::stoi(portEnv) : 8080;
 
-    app.port(port).multithreaded().run();
+    svr.set_keep_alive_max_count(100);
+    svr.set_read_timeout(30);
+    svr.set_write_timeout(30);
+
+    std::cout << "Listening on port " << port << std::endl;
+    svr.listen("0.0.0.0", port);
     return 0;
 }
