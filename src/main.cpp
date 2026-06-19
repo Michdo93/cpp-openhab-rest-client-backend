@@ -7,7 +7,7 @@
 
 using json = nlohmann::json;
 
-// Crow's built-in CORS handler is used via crow::App<crow::CORSHandler>
+
 
 // ── Helper: build client from request body ────────────────────────────────────
 
@@ -71,21 +71,25 @@ static crow::response err(const std::exception& e, int code = 502) {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 int main() {
-    crow::App<crow::CORSHandler> app;
+    crow::SimpleApp app;
 
-    // Configure CORS
-    auto& cors = app.get_middleware<crow::CORSHandler>();
-    cors.global()
-        .headers("Content-Type", "Authorization")
-        .methods("POST"_method, "GET"_method, "PUT"_method, "DELETE"_method, "OPTIONS"_method)
-        .origin("*");
-
-    // Healthcheck für Render.com
+    // Healthcheck + CORS preflight catchall
     CROW_ROUTE(app, "/")
     ([]() -> crow::response {
         crow::response r(R"({"status":"ok"})");
         r.set_header("Content-Type", "application/json");
+        r.set_header("Access-Control-Allow-Origin", "*");
         return r;
+    });
+
+    // OPTIONS preflight für alle /api/* Pfade
+    CROW_ROUTE(app, "/api/<path>").methods(crow::HTTPMethod::OPTIONS)
+    ([](const crow::request&, crow::response& res, const std::string&) {
+        res.set_header("Access-Control-Allow-Origin",  "*");
+        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        res.code = 204;
+        res.end();
     });
 
     // ── Connect ───────────────────────────────────────────────────────────────
