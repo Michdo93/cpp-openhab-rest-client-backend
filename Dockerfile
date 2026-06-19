@@ -3,6 +3,7 @@ FROM debian:bookworm-slim AS build
 RUN apt-get update && apt-get install -y \
     build-essential cmake git \
     libcurl4-openssl-dev \
+    libssl-dev \
     nlohmann-json3-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -15,7 +16,7 @@ RUN mkdir build && cd build \
 
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y \
-    libcurl4 ca-certificates \
+    libcurl4 ca-certificates libssl3 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

@@ -1,4 +1,3 @@
-#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "httplib.h"
 #include <openhab/openhab.h>
 #include <nlohmann/json.hpp>
