@@ -11,20 +11,16 @@ using json = nlohmann::json;
 struct CORSMiddleware {
     struct context {};
 
-    void before_handle(crow::request& req, crow::response& res, context&) {
-        if (req.method == crow::HTTPMethod::OPTIONS) {
-            res.set_header("Access-Control-Allow-Origin",  "*");
-            res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-            res.code = 204;
-            res.end();
-        }
-    }
+    void before_handle(crow::request&, crow::response&, context&) {}
 
-    void after_handle(crow::request&, crow::response& res, context&) {
+    void after_handle(crow::request& req, crow::response& res, context&) {
         res.set_header("Access-Control-Allow-Origin",  "*");
         res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        // Handle OPTIONS preflight here so after_handle still runs
+        if (req.method == crow::HTTPMethod::OPTIONS) {
+            res.code = 204;
+        }
     }
 };
 
@@ -91,6 +87,14 @@ static crow::response err(const std::exception& e, int code = 502) {
 
 int main() {
     crow::App<CORSMiddleware> app;
+
+    // Healthcheck für Render.com
+    CROW_ROUTE(app, "/")
+    ([]() -> crow::response {
+        crow::response r(R"({"status":"ok"})");
+        r.set_header("Content-Type", "application/json");
+        return r;
+    });
 
     // ── Connect ───────────────────────────────────────────────────────────────
     CROW_ROUTE(app, "/api/connect").methods(crow::HTTPMethod::POST)
