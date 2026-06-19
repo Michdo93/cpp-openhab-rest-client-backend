@@ -7,22 +7,7 @@
 
 using json = nlohmann::json;
 
-// ── CORS Middleware ───────────────────────────────────────────────────────────
-struct CORSMiddleware {
-    struct context {};
-
-    void before_handle(crow::request&, crow::response&, context&) {}
-
-    void after_handle(crow::request& req, crow::response& res, context&) {
-        res.set_header("Access-Control-Allow-Origin",  "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        // Handle OPTIONS preflight here so after_handle still runs
-        if (req.method == crow::HTTPMethod::OPTIONS) {
-            res.code = 204;
-        }
-    }
-};
+// Crow's built-in CORS handler is used via crow::App<crow::CORSHandler>
 
 // ── Helper: build client from request body ────────────────────────────────────
 
@@ -86,7 +71,14 @@ static crow::response err(const std::exception& e, int code = 502) {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 int main() {
-    crow::App<CORSMiddleware> app;
+    crow::App<crow::CORSHandler> app;
+
+    // Configure CORS
+    auto& cors = app.get_middleware<crow::CORSHandler>();
+    cors.global()
+        .headers("Content-Type", "Authorization")
+        .methods("POST"_method, "GET"_method, "PUT"_method, "DELETE"_method, "OPTIONS"_method)
+        .origin("*");
 
     // Healthcheck für Render.com
     CROW_ROUTE(app, "/")
