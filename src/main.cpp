@@ -7,6 +7,27 @@
 
 using json = nlohmann::json;
 
+// ── CORS Middleware ───────────────────────────────────────────────────────────
+struct CORSMiddleware {
+    struct context {};
+
+    void before_handle(crow::request& req, crow::response& res, context&) {
+        if (req.method == crow::HTTPMethod::OPTIONS) {
+            res.set_header("Access-Control-Allow-Origin",  "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            res.code = 204;
+            res.end();
+        }
+    }
+
+    void after_handle(crow::request&, crow::response& res, context&) {
+        res.set_header("Access-Control-Allow-Origin",  "*");
+        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+};
+
 // ── Helper: build client from request body ────────────────────────────────────
 
 static openhab::OpenHABClient makeClient(const crow::request& req) {
@@ -69,17 +90,7 @@ static crow::response err(const std::exception& e, int code = 502) {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 int main() {
-    crow::App app;
-
-    // OPTIONS preflight – must come first
-    CROW_ROUTE(app, "/<path>").methods(crow::HTTPMethod::OPTIONS)
-    ([](const crow::request&, crow::response& res, const std::string&) {
-        res.set_header("Access-Control-Allow-Origin",  "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.code = 204;
-        res.end();
-    });
+    crow::App<CORSMiddleware> app;
 
     // ── Connect ───────────────────────────────────────────────────────────────
     CROW_ROUTE(app, "/api/connect").methods(crow::HTTPMethod::POST)
