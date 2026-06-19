@@ -84,12 +84,13 @@ int main() {
 
     // OPTIONS preflight für alle /api/* Pfade
     CROW_ROUTE(app, "/api/<path>").methods(crow::HTTPMethod::OPTIONS)
-    ([](const crow::request&, crow::response& res, const std::string&) {
+    ([](const crow::request&, const std::string&) -> crow::response {
+        crow::response res(204);
         res.set_header("Access-Control-Allow-Origin",  "*");
         res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.code = 204;
-        res.end();
+        res.set_header("Access-Control-Max-Age",       "3600");
+        return res;
     });
 
     // ── Connect ───────────────────────────────────────────────────────────────
