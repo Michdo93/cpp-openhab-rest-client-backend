@@ -1,0 +1,3 @@
+[submodule "extern/cpp-openhab-rest-client"]
+	path = extern/cpp-openhab-rest-client
+	url = https://github.com/Michdo93/cpp-openhab-rest-client.git
