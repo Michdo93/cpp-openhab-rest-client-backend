@@ -1,39 +1,35 @@
 cmake_minimum_required(VERSION 3.16)
-project(OpenHABBackend VERSION 1.0.0 LANGUAGES CXX)
+project(OpenHABCppBackend VERSION 2.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-include(FetchContent)
-
-find_package(CURL REQUIRED)
-
-# nlohmann/json
-find_package(nlohmann_json 3.2.0 QUIET)
-if(NOT nlohmann_json_FOUND)
-  FetchContent_Declare(json
-    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
-  FetchContent_MakeAvailable(json)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
 endif()
 
-# cpp-httplib (header-only)
+include(FetchContent)
+set(OPENHAB_REST_CLIENT_DIR "" CACHE PATH "Source directory of cpp-openhab-rest-client (optional)")
+
+# cpp-openhab-rest-client 2.0.0 (brings nlohmann/json and libcurl)
+set(OPENHAB_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+if(OPENHAB_REST_CLIENT_DIR)
+  add_subdirectory(${OPENHAB_REST_CLIENT_DIR} cpp-openhab-rest-client)
+else()
+  FetchContent_Declare(cpp_openhab_rest_client
+    GIT_REPOSITORY https://github.com/Michdo93/cpp-openhab-rest-client.git
+    GIT_TAG        3aa4c94a026e871d698f50ec8be301c5d12cd4fb)   # 2.0.0
+  FetchContent_MakeAvailable(cpp_openhab_rest_client)
+endif()
+
+# cpp-httplib (header only, no OpenSSL needed – Render terminates TLS)
 FetchContent_Declare(httplib
   GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
   GIT_TAG        v0.18.3)
 FetchContent_MakeAvailable(httplib)
 
-# openHAB REST Client library
-add_subdirectory(extern/cpp-openhab-rest-client)
+find_package(Threads REQUIRED)
 
-# Backend executable
-add_executable(openhab_backend src/main.cpp)
-
-target_include_directories(openhab_backend PRIVATE
-  ${httplib_SOURCE_DIR})
-
-target_link_libraries(openhab_backend PRIVATE
-  openhab_rest_client_static
-  ${CURL_LIBRARIES}
-  nlohmann_json::nlohmann_json
-  pthread)
+add_executable(openhab_backend src/main.cpp src/calls.cpp)
+target_include_directories(openhab_backend PRIVATE src)
+target_link_libraries(openhab_backend PRIVATE openhab_rest_client_cpp_static httplib::httplib
+                      Threads::Threads)

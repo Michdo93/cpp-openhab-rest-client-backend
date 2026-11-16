@@ -1,0 +1,3301 @@
+[
+ {
+  "class": "Actions",
+  "method": "getActions",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Actions",
+  "method": "executeAction",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "actionUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "actionInputs",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddons",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddon",
+  "stream": false,
+  "params": [
+   {
+    "name": "addonID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddonConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "addonID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "updateAddonConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "addonID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "configData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "installAddon",
+  "stream": false,
+  "params": [
+   {
+    "name": "addonID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "uninstallAddon",
+  "stream": false,
+  "params": [
+   {
+    "name": "addonID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddonServices",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddonSuggestions",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "getAddonTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Addons",
+  "method": "installAddonFromUrl",
+  "stream": false,
+  "params": [
+   {
+    "name": "url",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Audio",
+  "method": "getDefaultSink",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Audio",
+  "method": "getDefaultSource",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Audio",
+  "method": "getSinks",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Audio",
+  "method": "getSources",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Auth",
+  "method": "getAPITokens",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Auth",
+  "method": "revokeAPIToken",
+  "stream": false,
+  "params": [
+   {
+    "name": "tokenName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Auth",
+  "method": "logout",
+  "stream": false,
+  "params": [
+   {
+    "name": "refreshToken",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sessionID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Auth",
+  "method": "getSessions",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Auth",
+  "method": "getToken",
+  "stream": false,
+  "params": [
+   {
+    "name": "useCookie",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "grantType",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "code",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "redirectURI",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "clientID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "refreshToken",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "codeVerifier",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ChannelTypes",
+  "method": "getChannelTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "prefixes",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ChannelTypes",
+  "method": "getChannelType",
+  "stream": false,
+  "params": [
+   {
+    "name": "channelTypeUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ChannelTypes",
+  "method": "getLinkableItemTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "channelTypeUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ConfigDescriptions",
+  "method": "getConfigDescriptions",
+  "stream": false,
+  "params": [
+   {
+    "name": "scheme",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ConfigDescriptions",
+  "method": "getConfigDescription",
+  "stream": false,
+  "params": [
+   {
+    "name": "uri",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Discovery",
+  "method": "getDiscoveryBindings",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Discovery",
+  "method": "getBindingInfo",
+  "stream": false,
+  "params": [
+   {
+    "name": "bindingID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Discovery",
+  "method": "startBindingScan",
+  "stream": false,
+  "params": [
+   {
+    "name": "bindingID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "input",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Events",
+  "method": "getEvents",
+  "stream": true,
+  "params": [
+   {
+    "name": "topics",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Events",
+  "method": "initiateStateTracker",
+  "stream": true,
+  "params": []
+ },
+ {
+  "class": "Events",
+  "method": "updateSSEConnectionItems",
+  "stream": false,
+  "params": [
+   {
+    "name": "connectionID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "items",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemEvent",
+  "stream": true,
+  "params": []
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemAddedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemRemovedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemUpdatedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemCommandEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemStateEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemStatePredictedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "ItemStateChangedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ItemEvents",
+  "method": "GroupItemStateChangedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   },
+   {
+    "name": "memberName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ThingEvents",
+  "method": "ThingAddedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ThingEvents",
+  "method": "ThingRemovedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ThingEvents",
+  "method": "ThingUpdatedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ThingEvents",
+  "method": "ThingStatusInfoEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ThingEvents",
+  "method": "ThingStatusInfoChangedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "InboxEvents",
+  "method": "InboxAddedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "InboxEvents",
+  "method": "InboxRemovedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "InboxEvents",
+  "method": "InboxUpdatedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "LinkEvents",
+  "method": "ItemChannelLinkAddedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   },
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "LinkEvents",
+  "method": "ItemChannelLinkRemovedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   },
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ChannelEvents",
+  "method": "ChannelDescriptionChangedEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "ChannelEvents",
+  "method": "ChannelTriggeredEvent",
+  "stream": true,
+  "params": [
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": false,
+    "default": "*"
+   }
+  ]
+ },
+ {
+  "class": "Iconsets",
+  "method": "getIconsets",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Inbox",
+  "method": "getDiscoveredThings",
+  "stream": false,
+  "params": [
+   {
+    "name": "includeIgnored",
+    "type": "bool",
+    "required": false,
+    "default": true
+   }
+  ]
+ },
+ {
+  "class": "Inbox",
+  "method": "removeDiscoveryResult",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Inbox",
+  "method": "approveDiscoveryResult",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "thingLabel",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "newThingID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Inbox",
+  "method": "ignoreDiscoveryResult",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Inbox",
+  "method": "unignoreDiscoveryResult",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "getItems",
+  "stream": false,
+  "params": [
+   {
+    "name": "type",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "tags",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "metadata",
+    "type": "str",
+    "required": false,
+    "default": ".*"
+   },
+   {
+    "name": "recursive",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "fields",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "staticDataOnly",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "parents",
+    "type": "bool",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "addOrUpdateItems",
+  "stream": false,
+  "params": [
+   {
+    "name": "items",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "getItem",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "metadata",
+    "type": "str",
+    "required": false,
+    "default": ".*"
+   },
+   {
+    "name": "recursive",
+    "type": "bool",
+    "required": false,
+    "default": true
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "parents",
+    "type": "bool",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "addOrUpdateItem",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "itemData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "sendCommand",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "command",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "source",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "postUpdate",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "state",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "source",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "deleteItem",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "addGroupMember",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "memberItemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "removeGroupMember",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "memberItemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "addMetadata",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "metadata",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "removeMetadata",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "getMetadataNamespaces",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "getSemanticItem",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "semanticClass",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "getItemState",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "updateItemState",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "state",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "source",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "addTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "tag",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "removeTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "tag",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Items",
+  "method": "purgeOrphanedMetadata",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Links",
+  "method": "getLinks",
+  "stream": false,
+  "params": [
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Links",
+  "method": "getLink",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Links",
+  "method": "linkItemToChannel",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "configuration",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Links",
+  "method": "unlinkItemFromChannel",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "channelUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Links",
+  "method": "deleteAllLinks",
+  "stream": false,
+  "params": [
+   {
+    "name": "object",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Links",
+  "method": "getOrphanLinks",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Links",
+  "method": "purgeUnusedLinks",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Logging",
+  "method": "getLoggers",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Logging",
+  "method": "getLogger",
+  "stream": false,
+  "params": [
+   {
+    "name": "loggerName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Logging",
+  "method": "modifyOrAddLogger",
+  "stream": false,
+  "params": [
+   {
+    "name": "loggerName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "level",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Logging",
+  "method": "removeLogger",
+  "stream": false,
+  "params": [
+   {
+    "name": "loggerName",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ModuleTypes",
+  "method": "getModuleTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "tags",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "typeFilter",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ModuleTypes",
+  "method": "getModuleType",
+  "stream": false,
+  "params": [
+   {
+    "name": "moduleTypeUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "getServices",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "getServiceConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "setServiceConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "config",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "deleteServiceConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "getItemsFromService",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "getItemPersistenceData",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "startTime",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "endTime",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "page",
+    "type": "int",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "pageLength",
+    "type": "int",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "boundary",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "itemState",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "displayState",
+    "type": "bool",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "storeItemData",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "time",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "state",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Persistence",
+  "method": "deleteItemData",
+  "stream": false,
+  "params": [
+   {
+    "name": "itemName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "startTime",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "endTime",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ProfileTypes",
+  "method": "getProfileTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "channelTypeUID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "itemType",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getRules",
+  "stream": false,
+  "params": [
+   {
+    "name": "prefix",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "tags",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "summary",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "staticDataOnly",
+    "type": "bool",
+    "required": false,
+    "default": false
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "createRule",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getRule",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "updateRule",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "ruleData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "deleteRule",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getModule",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleCategory",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getModuleConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleCategory",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getModuleConfigParam",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleCategory",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "param",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "setModuleConfigParam",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleCategory",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "moduleID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "param",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "value",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getActions",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getConditions",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "updateConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "configData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "setRuleState",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "enable",
+    "type": "bool",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "enable",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "disable",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "runNow",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "contextData",
+    "type": "json",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "getTriggers",
+  "stream": false,
+  "params": [
+   {
+    "name": "ruleUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Rules",
+  "method": "simulateSchedule",
+  "stream": false,
+  "params": [
+   {
+    "name": "fromTime",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "untilTime",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "getServices",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "getService",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "getServiceConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "updateServiceConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "configData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "deleteServiceConfig",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Services",
+  "method": "getServiceContexts",
+  "stream": false,
+  "params": [
+   {
+    "name": "serviceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getSitemaps",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getSitemap",
+  "stream": false,
+  "params": [
+   {
+    "name": "sitemapName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "type",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "jsonCallback",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "includeHidden",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getSitemapPage",
+  "stream": false,
+  "params": [
+   {
+    "name": "sitemapName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "pageID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "subscriptionID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "includeHidden",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getFullSitemap",
+  "stream": false,
+  "params": [
+   {
+    "name": "sitemapName",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "subscriptionID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "includeHidden",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getSitemapEvents",
+  "stream": true,
+  "params": [
+   {
+    "name": "subscriptionID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sitemapName",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "pageID",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "getFullSitemapEvents",
+  "stream": true,
+  "params": [
+   {
+    "name": "subscriptionID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sitemapName",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Sitemaps",
+  "method": "subscribeToSitemapEvents",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Systeminfo",
+  "method": "getSystemInfo",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Systeminfo",
+  "method": "getUoMInfo",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Tags",
+  "method": "getTags",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Tags",
+  "method": "createTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "tagData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Tags",
+  "method": "getTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "tagID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Tags",
+  "method": "updateTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "tagID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "tagData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Tags",
+  "method": "deleteTag",
+  "stream": false,
+  "params": [
+   {
+    "name": "tagID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Templates",
+  "method": "getTemplates",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Templates",
+  "method": "getTemplate",
+  "stream": false,
+  "params": [
+   {
+    "name": "templateUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ThingTypes",
+  "method": "getThingTypes",
+  "stream": false,
+  "params": [
+   {
+    "name": "bindingID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "ThingTypes",
+  "method": "getThingType",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingTypeUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThings",
+  "stream": false,
+  "params": [
+   {
+    "name": "summary",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "staticDataOnly",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "createThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "updateThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "thingData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "deleteThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "force",
+    "type": "bool",
+    "required": false,
+    "default": false
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "updateThingConfiguration",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "configurationData",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThingConfigStatus",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "setThingStatus",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "enabled",
+    "type": "bool",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "enableThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "disableThing",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "updateThingFirmware",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "firmwareVersion",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThingFirmwareStatus",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThingFirmwares",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Things",
+  "method": "getThingStatus",
+  "stream": false,
+  "params": [
+   {
+    "name": "thingUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Transformations",
+  "method": "getTransformations",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Transformations",
+  "method": "getTransformation",
+  "stream": false,
+  "params": [
+   {
+    "name": "transformationUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Transformations",
+  "method": "updateTransformation",
+  "stream": false,
+  "params": [
+   {
+    "name": "transformationUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "transformationData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Transformations",
+  "method": "deleteTransformation",
+  "stream": false,
+  "params": [
+   {
+    "name": "transformationUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Transformations",
+  "method": "getTransformationServices",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "UI",
+  "method": "getUIComponents",
+  "stream": false,
+  "params": [
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "summary",
+    "type": "bool",
+    "required": false,
+    "default": false
+   }
+  ]
+ },
+ {
+  "class": "UI",
+  "method": "addUIComponent",
+  "stream": false,
+  "params": [
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "componentData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "UI",
+  "method": "getUIComponent",
+  "stream": false,
+  "params": [
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "componentUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "UI",
+  "method": "updateUIComponent",
+  "stream": false,
+  "params": [
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "componentUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "componentData",
+    "type": "json",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "UI",
+  "method": "deleteUIComponent",
+  "stream": false,
+  "params": [
+   {
+    "name": "namespace",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "componentUID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "UI",
+  "method": "getUITiles",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "UUID",
+  "method": "getUUID",
+  "stream": false,
+  "params": []
+ },
+ {
+  "class": "Voice",
+  "method": "getDefaultVoice",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "startDialog",
+  "stream": false,
+  "params": [
+   {
+    "name": "sourceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "ksID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "sttID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "ttsID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "voiceID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "hliIDs",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "sinkID",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "keyword",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "listeningItem",
+    "type": "str",
+    "required": false,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "stopDialog",
+  "stream": false,
+  "params": [
+   {
+    "name": "sourceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "getInterpreters",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "interpretText",
+  "stream": false,
+  "params": [
+   {
+    "name": "text",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "getInterpreter",
+  "stream": false,
+  "params": [
+   {
+    "name": "interpreterID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "interpretTextBatch",
+  "stream": false,
+  "params": [
+   {
+    "name": "text",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "IDs",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "listenAndAnswer",
+  "stream": false,
+  "params": [
+   {
+    "name": "sourceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sttID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "ttsID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "voiceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "hliIDs",
+    "type": "json",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sinkID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "listeningItem",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "sayText",
+  "stream": false,
+  "params": [
+   {
+    "name": "text",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "voiceID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "sinkID",
+    "type": "str",
+    "required": true,
+    "default": null
+   },
+   {
+    "name": "volume",
+    "type": "str",
+    "required": false,
+    "default": "100"
+   }
+  ]
+ },
+ {
+  "class": "Voice",
+  "method": "getVoices",
+  "stream": false,
+  "params": [
+   {
+    "name": "language",
+    "type": "str",
+    "required": false,
+    "default": null
+   }
+  ]
+ }
+]
