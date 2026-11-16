@@ -17,7 +17,7 @@ if(OPENHAB_REST_CLIENT_DIR)
 else()
   FetchContent_Declare(cpp_openhab_rest_client
     GIT_REPOSITORY https://github.com/Michdo93/cpp-openhab-rest-client.git
-    GIT_TAG        7c0364552cf3e55068ad9d658d166401b9373918)   # 2.0.0
+    GIT_TAG        2.0.0)
   FetchContent_MakeAvailable(cpp_openhab_rest_client)
 endif()
 
