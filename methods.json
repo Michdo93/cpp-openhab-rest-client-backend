@@ -2,6 +2,7 @@
  {
   "class": "Actions",
   "method": "getActions",
+  "function": "Actions::getActions",
   "stream": false,
   "params": [
    {
@@ -21,6 +22,7 @@
  {
   "class": "Actions",
   "method": "executeAction",
+  "function": "Actions::executeAction",
   "stream": false,
   "params": [
    {
@@ -52,6 +54,7 @@
  {
   "class": "Addons",
   "method": "getAddons",
+  "function": "Addons::getAddons",
   "stream": false,
   "params": [
    {
@@ -71,6 +74,7 @@
  {
   "class": "Addons",
   "method": "getAddon",
+  "function": "Addons::getAddon",
   "stream": false,
   "params": [
    {
@@ -96,6 +100,7 @@
  {
   "class": "Addons",
   "method": "getAddonConfig",
+  "function": "Addons::getAddonConfig",
   "stream": false,
   "params": [
    {
@@ -115,6 +120,7 @@
  {
   "class": "Addons",
   "method": "updateAddonConfig",
+  "function": "Addons::updateAddonConfig",
   "stream": false,
   "params": [
    {
@@ -140,6 +146,7 @@
  {
   "class": "Addons",
   "method": "installAddon",
+  "function": "Addons::installAddon",
   "stream": false,
   "params": [
    {
@@ -159,6 +166,7 @@
  {
   "class": "Addons",
   "method": "uninstallAddon",
+  "function": "Addons::uninstallAddon",
   "stream": false,
   "params": [
    {
@@ -178,6 +186,7 @@
  {
   "class": "Addons",
   "method": "getAddonServices",
+  "function": "Addons::getAddonServices",
   "stream": false,
   "params": [
    {
@@ -191,6 +200,7 @@
  {
   "class": "Addons",
   "method": "getAddonSuggestions",
+  "function": "Addons::getAddonSuggestions",
   "stream": false,
   "params": [
    {
@@ -204,6 +214,7 @@
  {
   "class": "Addons",
   "method": "getAddonTypes",
+  "function": "Addons::getAddonTypes",
   "stream": false,
   "params": [
    {
@@ -223,6 +234,7 @@
  {
   "class": "Addons",
   "method": "installAddonFromUrl",
+  "function": "Addons::installAddonFromUrl",
   "stream": false,
   "params": [
    {
@@ -236,6 +248,7 @@
  {
   "class": "Audio",
   "method": "getDefaultSink",
+  "function": "Audio::getDefaultSink",
   "stream": false,
   "params": [
    {
@@ -249,6 +262,7 @@
  {
   "class": "Audio",
   "method": "getDefaultSource",
+  "function": "Audio::getDefaultSource",
   "stream": false,
   "params": [
    {
@@ -262,6 +276,7 @@
  {
   "class": "Audio",
   "method": "getSinks",
+  "function": "Audio::getSinks",
   "stream": false,
   "params": [
    {
@@ -275,6 +290,7 @@
  {
   "class": "Audio",
   "method": "getSources",
+  "function": "Audio::getSources",
   "stream": false,
   "params": [
    {
@@ -288,12 +304,14 @@
  {
   "class": "Auth",
   "method": "getAPITokens",
+  "function": "Auth::getAPITokens",
   "stream": false,
   "params": []
  },
  {
   "class": "Auth",
   "method": "revokeAPIToken",
+  "function": "Auth::revokeAPIToken",
   "stream": false,
   "params": [
    {
@@ -307,6 +325,7 @@
  {
   "class": "Auth",
   "method": "logout",
+  "function": "Auth::logout",
   "stream": false,
   "params": [
    {
@@ -326,12 +345,14 @@
  {
   "class": "Auth",
   "method": "getSessions",
+  "function": "Auth::getSessions",
   "stream": false,
   "params": []
  },
  {
   "class": "Auth",
   "method": "getToken",
+  "function": "Auth::getToken",
   "stream": false,
   "params": [
    {
@@ -381,6 +402,7 @@
  {
   "class": "ChannelTypes",
   "method": "getChannelTypes",
+  "function": "ChannelTypes::getChannelTypes",
   "stream": false,
   "params": [
    {
@@ -400,6 +422,7 @@
  {
   "class": "ChannelTypes",
   "method": "getChannelType",
+  "function": "ChannelTypes::getChannelType",
   "stream": false,
   "params": [
    {
@@ -419,6 +442,7 @@
  {
   "class": "ChannelTypes",
   "method": "getLinkableItemTypes",
+  "function": "ChannelTypes::getLinkableItemTypes",
   "stream": false,
   "params": [
    {
@@ -432,6 +456,7 @@
  {
   "class": "ConfigDescriptions",
   "method": "getConfigDescriptions",
+  "function": "ConfigDescriptions::getConfigDescriptions",
   "stream": false,
   "params": [
    {
@@ -451,6 +476,7 @@
  {
   "class": "ConfigDescriptions",
   "method": "getConfigDescription",
+  "function": "ConfigDescriptions::getConfigDescription",
   "stream": false,
   "params": [
    {
@@ -470,12 +496,14 @@
  {
   "class": "Discovery",
   "method": "getDiscoveryBindings",
+  "function": "Discovery::getDiscoveryBindings",
   "stream": false,
   "params": []
  },
  {
   "class": "Discovery",
   "method": "getBindingInfo",
+  "function": "Discovery::getBindingInfo",
   "stream": false,
   "params": [
    {
@@ -495,6 +523,7 @@
  {
   "class": "Discovery",
   "method": "startBindingScan",
+  "function": "Discovery::startBindingScan",
   "stream": false,
   "params": [
    {
@@ -514,6 +543,7 @@
  {
   "class": "Events",
   "method": "getEvents",
+  "function": "Events::getEvents",
   "stream": true,
   "params": [
    {
@@ -527,12 +557,14 @@
  {
   "class": "Events",
   "method": "initiateStateTracker",
+  "function": "Events::initiateStateTracker",
   "stream": true,
   "params": []
  },
  {
   "class": "Events",
   "method": "updateSSEConnectionItems",
+  "function": "Events::updateSSEConnectionItems",
   "stream": false,
   "params": [
    {
@@ -552,12 +584,14 @@
  {
   "class": "ItemEvents",
   "method": "ItemEvent",
+  "function": "ItemEvents::ItemEvent",
   "stream": true,
   "params": []
  },
  {
   "class": "ItemEvents",
   "method": "ItemAddedEvent",
+  "function": "ItemEvents::ItemAddedEvent",
   "stream": true,
   "params": [
    {
@@ -571,6 +605,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemRemovedEvent",
+  "function": "ItemEvents::ItemRemovedEvent",
   "stream": true,
   "params": [
    {
@@ -584,6 +619,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemUpdatedEvent",
+  "function": "ItemEvents::ItemUpdatedEvent",
   "stream": true,
   "params": [
    {
@@ -597,6 +633,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemCommandEvent",
+  "function": "ItemEvents::ItemCommandEvent",
   "stream": true,
   "params": [
    {
@@ -610,6 +647,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemStateEvent",
+  "function": "ItemEvents::ItemStateEvent",
   "stream": true,
   "params": [
    {
@@ -623,6 +661,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemStatePredictedEvent",
+  "function": "ItemEvents::ItemStatePredictedEvent",
   "stream": true,
   "params": [
    {
@@ -636,6 +675,7 @@
  {
   "class": "ItemEvents",
   "method": "ItemStateChangedEvent",
+  "function": "ItemEvents::ItemStateChangedEvent",
   "stream": true,
   "params": [
    {
@@ -649,6 +689,7 @@
  {
   "class": "ItemEvents",
   "method": "GroupItemStateChangedEvent",
+  "function": "ItemEvents::GroupItemStateChangedEvent",
   "stream": true,
   "params": [
    {
@@ -668,6 +709,7 @@
  {
   "class": "ThingEvents",
   "method": "ThingAddedEvent",
+  "function": "ThingEvents::ThingAddedEvent",
   "stream": true,
   "params": [
    {
@@ -681,6 +723,7 @@
  {
   "class": "ThingEvents",
   "method": "ThingRemovedEvent",
+  "function": "ThingEvents::ThingRemovedEvent",
   "stream": true,
   "params": [
    {
@@ -694,6 +737,7 @@
  {
   "class": "ThingEvents",
   "method": "ThingUpdatedEvent",
+  "function": "ThingEvents::ThingUpdatedEvent",
   "stream": true,
   "params": [
    {
@@ -707,6 +751,7 @@
  {
   "class": "ThingEvents",
   "method": "ThingStatusInfoEvent",
+  "function": "ThingEvents::ThingStatusInfoEvent",
   "stream": true,
   "params": [
    {
@@ -720,6 +765,7 @@
  {
   "class": "ThingEvents",
   "method": "ThingStatusInfoChangedEvent",
+  "function": "ThingEvents::ThingStatusInfoChangedEvent",
   "stream": true,
   "params": [
    {
@@ -733,6 +779,7 @@
  {
   "class": "InboxEvents",
   "method": "InboxAddedEvent",
+  "function": "InboxEvents::InboxAddedEvent",
   "stream": true,
   "params": [
    {
@@ -746,6 +793,7 @@
  {
   "class": "InboxEvents",
   "method": "InboxRemovedEvent",
+  "function": "InboxEvents::InboxRemovedEvent",
   "stream": true,
   "params": [
    {
@@ -759,6 +807,7 @@
  {
   "class": "InboxEvents",
   "method": "InboxUpdatedEvent",
+  "function": "InboxEvents::InboxUpdatedEvent",
   "stream": true,
   "params": [
    {
@@ -772,6 +821,7 @@
  {
   "class": "LinkEvents",
   "method": "ItemChannelLinkAddedEvent",
+  "function": "LinkEvents::ItemChannelLinkAddedEvent",
   "stream": true,
   "params": [
    {
@@ -791,6 +841,7 @@
  {
   "class": "LinkEvents",
   "method": "ItemChannelLinkRemovedEvent",
+  "function": "LinkEvents::ItemChannelLinkRemovedEvent",
   "stream": true,
   "params": [
    {
@@ -810,6 +861,7 @@
  {
   "class": "ChannelEvents",
   "method": "ChannelDescriptionChangedEvent",
+  "function": "ChannelEvents::ChannelDescriptionChangedEvent",
   "stream": true,
   "params": [
    {
@@ -823,6 +875,7 @@
  {
   "class": "ChannelEvents",
   "method": "ChannelTriggeredEvent",
+  "function": "ChannelEvents::ChannelTriggeredEvent",
   "stream": true,
   "params": [
    {
@@ -836,6 +889,7 @@
  {
   "class": "Iconsets",
   "method": "getIconsets",
+  "function": "Iconsets::getIconsets",
   "stream": false,
   "params": [
    {
@@ -849,6 +903,7 @@
  {
   "class": "Inbox",
   "method": "getDiscoveredThings",
+  "function": "Inbox::getDiscoveredThings",
   "stream": false,
   "params": [
    {
@@ -862,6 +917,7 @@
  {
   "class": "Inbox",
   "method": "removeDiscoveryResult",
+  "function": "Inbox::removeDiscoveryResult",
   "stream": false,
   "params": [
    {
@@ -875,6 +931,7 @@
  {
   "class": "Inbox",
   "method": "approveDiscoveryResult",
+  "function": "Inbox::approveDiscoveryResult",
   "stream": false,
   "params": [
    {
@@ -906,6 +963,7 @@
  {
   "class": "Inbox",
   "method": "ignoreDiscoveryResult",
+  "function": "Inbox::ignoreDiscoveryResult",
   "stream": false,
   "params": [
    {
@@ -919,6 +977,7 @@
  {
   "class": "Inbox",
   "method": "unignoreDiscoveryResult",
+  "function": "Inbox::unignoreDiscoveryResult",
   "stream": false,
   "params": [
    {
@@ -932,6 +991,7 @@
  {
   "class": "Items",
   "method": "getItems",
+  "function": "Items::getItems",
   "stream": false,
   "params": [
    {
@@ -987,6 +1047,7 @@
  {
   "class": "Items",
   "method": "addOrUpdateItems",
+  "function": "Items::addOrUpdateItems",
   "stream": false,
   "params": [
    {
@@ -1000,6 +1061,7 @@
  {
   "class": "Items",
   "method": "getItem",
+  "function": "Items::getItem",
   "stream": false,
   "params": [
    {
@@ -1037,6 +1099,7 @@
  {
   "class": "Items",
   "method": "addOrUpdateItem",
+  "function": "Items::addOrUpdateItem",
   "stream": false,
   "params": [
    {
@@ -1062,6 +1125,7 @@
  {
   "class": "Items",
   "method": "sendCommand",
+  "function": "Items::sendCommand",
   "stream": false,
   "params": [
    {
@@ -1087,6 +1151,7 @@
  {
   "class": "Items",
   "method": "postUpdate",
+  "function": "Items::postUpdate",
   "stream": false,
   "params": [
    {
@@ -1112,6 +1177,7 @@
  {
   "class": "Items",
   "method": "deleteItem",
+  "function": "Items::deleteItem",
   "stream": false,
   "params": [
    {
@@ -1125,6 +1191,7 @@
  {
   "class": "Items",
   "method": "addGroupMember",
+  "function": "Items::addGroupMember",
   "stream": false,
   "params": [
    {
@@ -1144,6 +1211,7 @@
  {
   "class": "Items",
   "method": "removeGroupMember",
+  "function": "Items::removeGroupMember",
   "stream": false,
   "params": [
    {
@@ -1163,6 +1231,7 @@
  {
   "class": "Items",
   "method": "addMetadata",
+  "function": "Items::addMetadata",
   "stream": false,
   "params": [
    {
@@ -1188,6 +1257,7 @@
  {
   "class": "Items",
   "method": "removeMetadata",
+  "function": "Items::removeMetadata",
   "stream": false,
   "params": [
    {
@@ -1207,6 +1277,7 @@
  {
   "class": "Items",
   "method": "getMetadataNamespaces",
+  "function": "Items::getMetadataNamespaces",
   "stream": false,
   "params": [
    {
@@ -1226,6 +1297,7 @@
  {
   "class": "Items",
   "method": "getSemanticItem",
+  "function": "Items::getSemanticItem",
   "stream": false,
   "params": [
    {
@@ -1251,6 +1323,7 @@
  {
   "class": "Items",
   "method": "getItemState",
+  "function": "Items::getItemState",
   "stream": false,
   "params": [
    {
@@ -1264,6 +1337,7 @@
  {
   "class": "Items",
   "method": "updateItemState",
+  "function": "Items::updateItemState",
   "stream": false,
   "params": [
    {
@@ -1295,6 +1369,7 @@
  {
   "class": "Items",
   "method": "addTag",
+  "function": "Items::addTag",
   "stream": false,
   "params": [
    {
@@ -1314,6 +1389,7 @@
  {
   "class": "Items",
   "method": "removeTag",
+  "function": "Items::removeTag",
   "stream": false,
   "params": [
    {
@@ -1333,12 +1409,14 @@
  {
   "class": "Items",
   "method": "purgeOrphanedMetadata",
+  "function": "Items::purgeOrphanedMetadata",
   "stream": false,
   "params": []
  },
  {
   "class": "Links",
   "method": "getLinks",
+  "function": "Links::getLinks",
   "stream": false,
   "params": [
    {
@@ -1358,6 +1436,7 @@
  {
   "class": "Links",
   "method": "getLink",
+  "function": "Links::getLink",
   "stream": false,
   "params": [
    {
@@ -1377,6 +1456,7 @@
  {
   "class": "Links",
   "method": "linkItemToChannel",
+  "function": "Links::linkItemToChannel",
   "stream": false,
   "params": [
    {
@@ -1402,6 +1482,7 @@
  {
   "class": "Links",
   "method": "unlinkItemFromChannel",
+  "function": "Links::unlinkItemFromChannel",
   "stream": false,
   "params": [
    {
@@ -1421,6 +1502,7 @@
  {
   "class": "Links",
   "method": "deleteAllLinks",
+  "function": "Links::deleteAllLinks",
   "stream": false,
   "params": [
    {
@@ -1434,24 +1516,28 @@
  {
   "class": "Links",
   "method": "getOrphanLinks",
+  "function": "Links::getOrphanLinks",
   "stream": false,
   "params": []
  },
  {
   "class": "Links",
   "method": "purgeUnusedLinks",
+  "function": "Links::purgeUnusedLinks",
   "stream": false,
   "params": []
  },
  {
   "class": "Logging",
   "method": "getLoggers",
+  "function": "Logging::getLoggers",
   "stream": false,
   "params": []
  },
  {
   "class": "Logging",
   "method": "getLogger",
+  "function": "Logging::getLogger",
   "stream": false,
   "params": [
    {
@@ -1465,6 +1551,7 @@
  {
   "class": "Logging",
   "method": "modifyOrAddLogger",
+  "function": "Logging::modifyOrAddLogger",
   "stream": false,
   "params": [
    {
@@ -1484,6 +1571,7 @@
  {
   "class": "Logging",
   "method": "removeLogger",
+  "function": "Logging::removeLogger",
   "stream": false,
   "params": [
    {
@@ -1497,6 +1585,7 @@
  {
   "class": "ModuleTypes",
   "method": "getModuleTypes",
+  "function": "ModuleTypes::getModuleTypes",
   "stream": false,
   "params": [
    {
@@ -1522,6 +1611,7 @@
  {
   "class": "ModuleTypes",
   "method": "getModuleType",
+  "function": "ModuleTypes::getModuleType",
   "stream": false,
   "params": [
    {
@@ -1541,6 +1631,7 @@
  {
   "class": "Persistence",
   "method": "getServices",
+  "function": "Persistence::getServices",
   "stream": false,
   "params": [
    {
@@ -1554,6 +1645,7 @@
  {
   "class": "Persistence",
   "method": "getServiceConfiguration",
+  "function": "Persistence::getServiceConfiguration",
   "stream": false,
   "params": [
    {
@@ -1567,6 +1659,7 @@
  {
   "class": "Persistence",
   "method": "setServiceConfiguration",
+  "function": "Persistence::setServiceConfiguration",
   "stream": false,
   "params": [
    {
@@ -1586,6 +1679,7 @@
  {
   "class": "Persistence",
   "method": "deleteServiceConfiguration",
+  "function": "Persistence::deleteServiceConfiguration",
   "stream": false,
   "params": [
    {
@@ -1599,6 +1693,7 @@
  {
   "class": "Persistence",
   "method": "getItemsFromService",
+  "function": "Persistence::getItemsFromService",
   "stream": false,
   "params": [
    {
@@ -1618,6 +1713,7 @@
  {
   "class": "Persistence",
   "method": "getItemPersistenceData",
+  "function": "Persistence::getItemPersistenceData",
   "stream": false,
   "params": [
    {
@@ -1685,6 +1781,7 @@
  {
   "class": "Persistence",
   "method": "storeItemData",
+  "function": "Persistence::storeItemData",
   "stream": false,
   "params": [
    {
@@ -1716,6 +1813,7 @@
  {
   "class": "Persistence",
   "method": "deleteItemData",
+  "function": "Persistence::deleteItemData",
   "stream": false,
   "params": [
    {
@@ -1747,6 +1845,7 @@
  {
   "class": "ProfileTypes",
   "method": "getProfileTypes",
+  "function": "ProfileTypes::getProfileTypes",
   "stream": false,
   "params": [
    {
@@ -1772,6 +1871,7 @@
  {
   "class": "Rules",
   "method": "getRules",
+  "function": "Rules::getRules",
   "stream": false,
   "params": [
    {
@@ -1803,6 +1903,7 @@
  {
   "class": "Rules",
   "method": "createRule",
+  "function": "Rules::createRule",
   "stream": false,
   "params": [
    {
@@ -1816,6 +1917,7 @@
  {
   "class": "Rules",
   "method": "getRule",
+  "function": "Rules::getRule",
   "stream": false,
   "params": [
    {
@@ -1829,6 +1931,7 @@
  {
   "class": "Rules",
   "method": "updateRule",
+  "function": "Rules::updateRule",
   "stream": false,
   "params": [
    {
@@ -1848,6 +1951,7 @@
  {
   "class": "Rules",
   "method": "deleteRule",
+  "function": "Rules::deleteRule",
   "stream": false,
   "params": [
    {
@@ -1861,6 +1965,7 @@
  {
   "class": "Rules",
   "method": "getModule",
+  "function": "Rules::getModule",
   "stream": false,
   "params": [
    {
@@ -1886,6 +1991,7 @@
  {
   "class": "Rules",
   "method": "getModuleConfig",
+  "function": "Rules::getModuleConfig",
   "stream": false,
   "params": [
    {
@@ -1911,6 +2017,7 @@
  {
   "class": "Rules",
   "method": "getModuleConfigParam",
+  "function": "Rules::getModuleConfigParam",
   "stream": false,
   "params": [
    {
@@ -1942,6 +2049,7 @@
  {
   "class": "Rules",
   "method": "setModuleConfigParam",
+  "function": "Rules::setModuleConfigParam",
   "stream": false,
   "params": [
    {
@@ -1979,6 +2087,7 @@
  {
   "class": "Rules",
   "method": "getActions",
+  "function": "Rules::getActions",
   "stream": false,
   "params": [
    {
@@ -1992,6 +2101,7 @@
  {
   "class": "Rules",
   "method": "getConditions",
+  "function": "Rules::getConditions",
   "stream": false,
   "params": [
    {
@@ -2005,6 +2115,7 @@
  {
   "class": "Rules",
   "method": "getConfiguration",
+  "function": "Rules::getConfiguration",
   "stream": false,
   "params": [
    {
@@ -2018,6 +2129,7 @@
  {
   "class": "Rules",
   "method": "updateConfiguration",
+  "function": "Rules::updateConfiguration",
   "stream": false,
   "params": [
    {
@@ -2037,6 +2149,7 @@
  {
   "class": "Rules",
   "method": "setRuleState",
+  "function": "Rules::setRuleState",
   "stream": false,
   "params": [
    {
@@ -2056,6 +2169,7 @@
  {
   "class": "Rules",
   "method": "enable",
+  "function": "Rules::enable",
   "stream": false,
   "params": [
    {
@@ -2069,6 +2183,7 @@
  {
   "class": "Rules",
   "method": "disable",
+  "function": "Rules::disable",
   "stream": false,
   "params": [
    {
@@ -2082,6 +2197,7 @@
  {
   "class": "Rules",
   "method": "runNow",
+  "function": "Rules::runNow",
   "stream": false,
   "params": [
    {
@@ -2101,6 +2217,7 @@
  {
   "class": "Rules",
   "method": "getTriggers",
+  "function": "Rules::getTriggers",
   "stream": false,
   "params": [
    {
@@ -2114,6 +2231,7 @@
  {
   "class": "Rules",
   "method": "simulateSchedule",
+  "function": "Rules::simulateSchedule",
   "stream": false,
   "params": [
    {
@@ -2133,6 +2251,7 @@
  {
   "class": "Services",
   "method": "getServices",
+  "function": "Services::getServices",
   "stream": false,
   "params": [
    {
@@ -2146,6 +2265,7 @@
  {
   "class": "Services",
   "method": "getService",
+  "function": "Services::getService",
   "stream": false,
   "params": [
    {
@@ -2165,6 +2285,7 @@
  {
   "class": "Services",
   "method": "getServiceConfig",
+  "function": "Services::getServiceConfig",
   "stream": false,
   "params": [
    {
@@ -2178,6 +2299,7 @@
  {
   "class": "Services",
   "method": "updateServiceConfig",
+  "function": "Services::updateServiceConfig",
   "stream": false,
   "params": [
    {
@@ -2203,6 +2325,7 @@
  {
   "class": "Services",
   "method": "deleteServiceConfig",
+  "function": "Services::deleteServiceConfig",
   "stream": false,
   "params": [
    {
@@ -2216,6 +2339,7 @@
  {
   "class": "Services",
   "method": "getServiceContexts",
+  "function": "Services::getServiceContexts",
   "stream": false,
   "params": [
    {
@@ -2235,12 +2359,14 @@
  {
   "class": "Sitemaps",
   "method": "getSitemaps",
+  "function": "Sitemaps::getSitemaps",
   "stream": false,
   "params": []
  },
  {
   "class": "Sitemaps",
   "method": "getSitemap",
+  "function": "Sitemaps::getSitemap",
   "stream": false,
   "params": [
    {
@@ -2278,6 +2404,7 @@
  {
   "class": "Sitemaps",
   "method": "getSitemapPage",
+  "function": "Sitemaps::getSitemapPage",
   "stream": false,
   "params": [
    {
@@ -2315,6 +2442,7 @@
  {
   "class": "Sitemaps",
   "method": "getFullSitemap",
+  "function": "Sitemaps::getFullSitemap",
   "stream": false,
   "params": [
    {
@@ -2346,6 +2474,7 @@
  {
   "class": "Sitemaps",
   "method": "getSitemapEvents",
+  "function": "Sitemaps::getSitemapEvents",
   "stream": true,
   "params": [
    {
@@ -2371,6 +2500,7 @@
  {
   "class": "Sitemaps",
   "method": "getFullSitemapEvents",
+  "function": "Sitemaps::getFullSitemapEvents",
   "stream": true,
   "params": [
    {
@@ -2390,24 +2520,28 @@
  {
   "class": "Sitemaps",
   "method": "subscribeToSitemapEvents",
+  "function": "Sitemaps::subscribeToSitemapEvents",
   "stream": false,
   "params": []
  },
  {
   "class": "Systeminfo",
   "method": "getSystemInfo",
+  "function": "Systeminfo::getSystemInfo",
   "stream": false,
   "params": []
  },
  {
   "class": "Systeminfo",
   "method": "getUoMInfo",
+  "function": "Systeminfo::getUoMInfo",
   "stream": false,
   "params": []
  },
  {
   "class": "Tags",
   "method": "getTags",
+  "function": "Tags::getTags",
   "stream": false,
   "params": [
    {
@@ -2421,6 +2555,7 @@
  {
   "class": "Tags",
   "method": "createTag",
+  "function": "Tags::createTag",
   "stream": false,
   "params": [
    {
@@ -2440,6 +2575,7 @@
  {
   "class": "Tags",
   "method": "getTag",
+  "function": "Tags::getTag",
   "stream": false,
   "params": [
    {
@@ -2459,6 +2595,7 @@
  {
   "class": "Tags",
   "method": "updateTag",
+  "function": "Tags::updateTag",
   "stream": false,
   "params": [
    {
@@ -2484,6 +2621,7 @@
  {
   "class": "Tags",
   "method": "deleteTag",
+  "function": "Tags::deleteTag",
   "stream": false,
   "params": [
    {
@@ -2503,6 +2641,7 @@
  {
   "class": "Templates",
   "method": "getTemplates",
+  "function": "Templates::getTemplates",
   "stream": false,
   "params": [
    {
@@ -2516,6 +2655,7 @@
  {
   "class": "Templates",
   "method": "getTemplate",
+  "function": "Templates::getTemplate",
   "stream": false,
   "params": [
    {
@@ -2535,6 +2675,7 @@
  {
   "class": "ThingTypes",
   "method": "getThingTypes",
+  "function": "ThingTypes::getThingTypes",
   "stream": false,
   "params": [
    {
@@ -2554,6 +2695,7 @@
  {
   "class": "ThingTypes",
   "method": "getThingType",
+  "function": "ThingTypes::getThingType",
   "stream": false,
   "params": [
    {
@@ -2573,6 +2715,7 @@
  {
   "class": "Things",
   "method": "getThings",
+  "function": "Things::getThings",
   "stream": false,
   "params": [
    {
@@ -2598,6 +2741,7 @@
  {
   "class": "Things",
   "method": "createThing",
+  "function": "Things::createThing",
   "stream": false,
   "params": [
    {
@@ -2617,6 +2761,7 @@
  {
   "class": "Things",
   "method": "getThing",
+  "function": "Things::getThing",
   "stream": false,
   "params": [
    {
@@ -2636,6 +2781,7 @@
  {
   "class": "Things",
   "method": "updateThing",
+  "function": "Things::updateThing",
   "stream": false,
   "params": [
    {
@@ -2661,6 +2807,7 @@
  {
   "class": "Things",
   "method": "deleteThing",
+  "function": "Things::deleteThing",
   "stream": false,
   "params": [
    {
@@ -2686,6 +2833,7 @@
  {
   "class": "Things",
   "method": "updateThingConfiguration",
+  "function": "Things::updateThingConfiguration",
   "stream": false,
   "params": [
    {
@@ -2711,6 +2859,7 @@
  {
   "class": "Things",
   "method": "getThingConfigStatus",
+  "function": "Things::getThingConfigStatus",
   "stream": false,
   "params": [
    {
@@ -2730,6 +2879,7 @@
  {
   "class": "Things",
   "method": "setThingStatus",
+  "function": "Things::setThingStatus",
   "stream": false,
   "params": [
    {
@@ -2755,6 +2905,7 @@
  {
   "class": "Things",
   "method": "enableThing",
+  "function": "Things::enableThing",
   "stream": false,
   "params": [
    {
@@ -2768,6 +2919,7 @@
  {
   "class": "Things",
   "method": "disableThing",
+  "function": "Things::disableThing",
   "stream": false,
   "params": [
    {
@@ -2781,6 +2933,7 @@
  {
   "class": "Things",
   "method": "updateThingFirmware",
+  "function": "Things::updateThingFirmware",
   "stream": false,
   "params": [
    {
@@ -2806,6 +2959,7 @@
  {
   "class": "Things",
   "method": "getThingFirmwareStatus",
+  "function": "Things::getThingFirmwareStatus",
   "stream": false,
   "params": [
    {
@@ -2825,6 +2979,7 @@
  {
   "class": "Things",
   "method": "getThingFirmwares",
+  "function": "Things::getThingFirmwares",
   "stream": false,
   "params": [
    {
@@ -2844,6 +2999,7 @@
  {
   "class": "Things",
   "method": "getThingStatus",
+  "function": "Things::getThingStatus",
   "stream": false,
   "params": [
    {
@@ -2863,12 +3019,14 @@
  {
   "class": "Transformations",
   "method": "getTransformations",
+  "function": "Transformations::getTransformations",
   "stream": false,
   "params": []
  },
  {
   "class": "Transformations",
   "method": "getTransformation",
+  "function": "Transformations::getTransformation",
   "stream": false,
   "params": [
    {
@@ -2882,6 +3040,7 @@
  {
   "class": "Transformations",
   "method": "updateTransformation",
+  "function": "Transformations::updateTransformation",
   "stream": false,
   "params": [
    {
@@ -2901,6 +3060,7 @@
  {
   "class": "Transformations",
   "method": "deleteTransformation",
+  "function": "Transformations::deleteTransformation",
   "stream": false,
   "params": [
    {
@@ -2914,12 +3074,14 @@
  {
   "class": "Transformations",
   "method": "getTransformationServices",
+  "function": "Transformations::getTransformationServices",
   "stream": false,
   "params": []
  },
  {
   "class": "UI",
   "method": "getUIComponents",
+  "function": "UI::getUIComponents",
   "stream": false,
   "params": [
    {
@@ -2939,6 +3101,7 @@
  {
   "class": "UI",
   "method": "addUIComponent",
+  "function": "UI::addUIComponent",
   "stream": false,
   "params": [
    {
@@ -2958,6 +3121,7 @@
  {
   "class": "UI",
   "method": "getUIComponent",
+  "function": "UI::getUIComponent",
   "stream": false,
   "params": [
    {
@@ -2977,6 +3141,7 @@
  {
   "class": "UI",
   "method": "updateUIComponent",
+  "function": "UI::updateUIComponent",
   "stream": false,
   "params": [
    {
@@ -3002,6 +3167,7 @@
  {
   "class": "UI",
   "method": "deleteUIComponent",
+  "function": "UI::deleteUIComponent",
   "stream": false,
   "params": [
    {
@@ -3021,18 +3187,21 @@
  {
   "class": "UI",
   "method": "getUITiles",
+  "function": "UI::getUITiles",
   "stream": false,
   "params": []
  },
  {
   "class": "UUID",
   "method": "getUUID",
+  "function": "UUID::getUUID",
   "stream": false,
   "params": []
  },
  {
   "class": "Voice",
   "method": "getDefaultVoice",
+  "function": "Voice::getDefaultVoice",
   "stream": false,
   "params": [
    {
@@ -3046,6 +3215,7 @@
  {
   "class": "Voice",
   "method": "startDialog",
+  "function": "Voice::startDialog",
   "stream": false,
   "params": [
    {
@@ -3113,6 +3283,7 @@
  {
   "class": "Voice",
   "method": "stopDialog",
+  "function": "Voice::stopDialog",
   "stream": false,
   "params": [
    {
@@ -3126,6 +3297,7 @@
  {
   "class": "Voice",
   "method": "getInterpreters",
+  "function": "Voice::getInterpreters",
   "stream": false,
   "params": [
    {
@@ -3139,6 +3311,7 @@
  {
   "class": "Voice",
   "method": "interpretText",
+  "function": "Voice::interpretText",
   "stream": false,
   "params": [
    {
@@ -3158,6 +3331,7 @@
  {
   "class": "Voice",
   "method": "getInterpreter",
+  "function": "Voice::getInterpreter",
   "stream": false,
   "params": [
    {
@@ -3177,6 +3351,7 @@
  {
   "class": "Voice",
   "method": "interpretTextBatch",
+  "function": "Voice::interpretTextBatch",
   "stream": false,
   "params": [
    {
@@ -3202,6 +3377,7 @@
  {
   "class": "Voice",
   "method": "listenAndAnswer",
+  "function": "Voice::listenAndAnswer",
   "stream": false,
   "params": [
    {
@@ -3257,6 +3433,7 @@
  {
   "class": "Voice",
   "method": "sayText",
+  "function": "Voice::sayText",
   "stream": false,
   "params": [
    {
@@ -3288,6 +3465,7 @@
  {
   "class": "Voice",
   "method": "getVoices",
+  "function": "Voice::getVoices",
   "stream": false,
   "params": [
    {

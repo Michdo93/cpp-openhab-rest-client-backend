@@ -49,7 +49,8 @@ def main():
             lines += ["        " + l for l in call_expr(c.name, m)]
             lines.append("    }")
             (streams if m.stream else rest).extend(lines)
-            table.append({"class": c.name, "method": m.name, "stream": m.stream,
+            table.append({"class": c.name, "method": m.name, "function": f"{c.name}::{m.name}",
+                          "stream": m.stream,
                           "params": [{"name": n, "type": t, "required": r,
                                       "default": default_text(d)}
                                      for n, t, d, r in m.params]})
